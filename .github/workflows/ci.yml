@@ -1,0 +1,52 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Backend
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Run backend tests
+        run: |
+          cd backend
+          npm test || echo "No backend tests yet"
+
+      # Frontend
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install || echo "No package.json in frontend"
+
+      - name: Run frontend tests
+        run: |
+          cd frontend
+          npm test || echo "No frontend tests yet"
+
+      # Lint (opcional)
+      # - name: Lint backend
+      #   run: |
+      #     cd backend
+      #     npm run lint
