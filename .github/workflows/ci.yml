@@ -9,11 +9,9 @@ on:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-version: [18.x]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,7 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Backend
       - name: Install backend dependencies
         run: |
           cd backend
@@ -32,21 +29,4 @@ jobs:
       - name: Run backend tests
         run: |
           cd backend
-          npm test || echo "No backend tests yet"
-
-      # Frontend
-      - name: Install frontend dependencies
-        run: |
-          cd frontend
-          npm install || echo "No package.json in frontend"
-
-      - name: Run frontend tests
-        run: |
-          cd frontend
-          npm test || echo "No frontend tests yet"
-
-      # Lint (opcional)
-      # - name: Lint backend
-      #   run: |
-      #     cd backend
-      #     npm run lint
+          npm test
